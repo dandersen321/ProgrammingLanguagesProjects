@@ -1,0 +1,49 @@
+/squareLength 30 def %length of one side of the square
+/shouldBeBlack 1 def % 1 is equivalent to true
+
+%draws X amount of squares from left to right
+%where X is a number passed into the function (stored in the name numOfSquares)
+/squares 
+{
+	1 dict begin
+	/numOfSquares exch def
+	
+	numOfSquares 1 ge
+	{
+		newpath
+		
+		%draws from top left point
+		0 0 moveto
+		0 0 squareLength sub rlineto
+		squareLength 0 rlineto
+		0 squareLength rlineto
+		0 squareLength sub 0 rlineto
+		
+		%determine and set color of this square
+		shouldBeBlack 1 eq
+		{
+			0 0 0 setrgbcolor %black
+			fill
+			/shouldBeBlack 0 def
+		}
+		{	
+			0.5 0.5 0.5 setrgbcolor %gray
+			fill
+			/shouldBeBlack 1 def
+		}
+		ifelse
+		
+		closepath		
+		stroke
+		
+		%translates to the right, does the recursion and then
+		%after the recursion translates back to the left to 
+		%in essence restore the old gstate
+		squareLength 0 translate 
+		numOfSquares 1 sub squares
+		0 squareLength sub 0 translate
+	}
+	if
+	
+	end
+} def

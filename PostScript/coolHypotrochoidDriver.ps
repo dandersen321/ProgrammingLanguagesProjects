@@ -1,0 +1,18 @@
+(hypotrochoid.ps) run
+
+/Times-Roman findfont        % Find the font 
+14 scalefont                 % Make it a bigger font
+setfont                      % Now load the font as the current font
+
+0 0 moveto
+300 300 translate
+%I didn't know if we could do multiple hypotrochoids on top of each other  for the extra-credit assignment, I 
+%just liked the way they looked together but if I had to choose one I would do: 197 147 90 57 hypotrochoid
+49 35 25 99 hypotrochoid
+199 149 70 50 hypotrochoid
+197 147 70 50 hypotrochoid
+197 147 90 57 hypotrochoid
+197 147 222 57 hypotrochoid
+198 148 199 99 hypotrochoid
+stroke
+showpage

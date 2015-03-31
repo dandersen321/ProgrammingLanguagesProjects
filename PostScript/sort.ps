@@ -1,0 +1,56 @@
+%Recursive Insertion sort
+%works by running to the last element, and
+%then on the way up, inserting each element one at a time
+%into the now-sorted list below (in terms of the stack) the inserted elem
+/sort 
+{
+	1 dict begin
+	
+	count 1 gt
+	{
+		/topElem exch def
+		sort
+		topElem insert
+	}
+	if
+	
+	end
+	
+} def
+
+
+
+%inserts an element into the sorted stack
+/insert
+{
+	1 dict begin
+	/elemToInsert exch def
+	
+	count 0 le
+	{
+		elemToInsert
+	}
+	{
+		%if the element being inserted is not
+		%in the right place I temporarily take off
+		%the top element, then call insert again and once
+		%enough top elements are taken off so the new element
+		%is in the right place in the stack, I put all the tempTopElem'so
+		%back on to the stack
+		dup elemToInsert gt
+		{
+			/tempTopElem exch def
+			elemToInsert insert
+			tempTopElem
+		}
+		{
+			elemToInsert
+		}
+		ifelse
+	}
+	ifelse
+	
+	end
+
+} def
+

@@ -1,0 +1,126 @@
+/lastX 0 def %lastX position of currentpointer
+/lastY 0 def %lastY position of currentpointer
+
+/intialNumberOfTimesAround -1 def %initial number of recursive calls
+
+%creates a hypotrochoid with random colors for each line segment
+%takes 4 parameters:
+%numberOfTimesAround is the number of hypotrochoid calls to make
+%length of Arm is the length of the arm used to "draw" the hypotrochoid
+%radiusOfSmallCircle the radius of the inner circle
+%radiusOfBigCircle the radius of the outer circle in which the smaller circle revolves in
+/hypotrochoid 
+{
+	1 dict begin
+	/numberOfTimesAround exch def
+	/lengthOfArm exch def
+	/radiusOfSmallCircle exch def
+	/radiusOfBigCircle exch def
+	
+	intialNumberOfTimesAround -1 eq
+	{
+		/intialNumberOfTimesAround numberOfTimesAround def
+	}
+	if
+	
+	numberOfTimesAround 0 gt
+	{	
+		0 1 360 
+		{
+			/i exch def
+			/t numberOfTimesAround i mul def
+			
+			%get newX position
+			radiusOfBigCircle radiusOfSmallCircle sub t cos mul
+			radiusOfBigCircle radiusOfSmallCircle sub t mul radiusOfSmallCircle div cos lengthOfArm mul
+			add
+			/newX exch def
+			
+			%get newY position
+			radiusOfBigCircle radiusOfSmallCircle sub t sin mul
+			radiusOfBigCircle radiusOfSmallCircle sub t mul radiusOfSmallCircle div sin lengthOfArm mul
+			sub
+			/newY exch def
+			
+			%don't stroke on the first hypotrochoid call which is used simply
+			%to find the starting point from which to start drawing from
+			lastX 0 ne
+			{
+				lastX lastY moveto
+				numberOfTimesAround intialNumberOfTimesAround setColor
+				newX newY lineto
+				stroke
+			}
+			if
+			
+			
+			/lastX newX def
+			/lastY newY def
+		}
+		for
+		radiusOfBigCircle radiusOfSmallCircle lengthOfArm numberOfTimesAround 1 sub hypotrochoid
+	}
+	if
+	
+	intialNumberOfTimesAround numberOfTimesAround eq
+	{
+		/intialNumberOfTimesAround -1 def
+		0 0 0 setrgbcolor
+	}
+	if
+	
+	
+	
+	end
+
+} def
+
+
+%this function takes the currentRecursiveCall, which is the number of circular like shapes drawn so far + 1
+%and the range in which the circle should be "rainbowed to", meaning the closer to the range, the more blue the circle will be
+%which currently is being sent the /intialNumberOfTimesAround meaning that the blue circles are the circles drawn earliest 
+%(i.e. last in the stack calls whereas the red are the circles drawn first (i.e. first circles to be called but because 
+%of recursion are drawn last)
+/setColor
+{
+	1 dict begin
+	/currentRecursiveCall exch def
+	/rangeToColorFor exch def
+	
+	/percentIntoBranchesWidthWise rangeToColorFor currentRecursiveCall div def %what percent from left to right is the branch 
+	
+	%these percent values are the percent of red, green, and blue to be put into the new color of the branch
+	%there are 3 seperate algorithms used to determine their value:
+	
+	
+	%these are the values that are used when the branch is in the 1/3 left part of the tree
+	%values ranges are R:1, green: 0 - 1, blue: 0
+	/redPercent 1 def		
+	/greenPercent percentIntoBranchesWidthWise 3 mul def
+	/bluePercent 0 def		
+
+	%these are the values that are used when the branch is in the 1/3 middle part of the tree
+	%values ranges are R:0-1, green: 1, blue: 0-1
+	percentIntoBranchesWidthWise 1 3 div ge
+	{
+		/redPercent 1 percentIntoBranchesWidthWise 3 mul sub def
+		/greenPercent 1 def
+		/bluePercent  percentIntoBranchesWidthWise 1 2 div sub 3 mul def
+	}
+	if
+	
+	%these are the values that are used when the branch is in the 1/3 right part of the tree
+	%values ranges are R:0, green: 0-1, blue: 1
+	percentIntoBranchesWidthWise 2 3 div ge
+	{
+		/redPercent 0 def
+		/greenPercent 1 percentIntoBranchesWidthWise 2 3 div sub 3 mul sub def
+		/bluePercent 1 def
+	}
+	if
+	
+	redPercent greenPercent bluePercent setrgbcolor
+	
+	
+	end
+} def

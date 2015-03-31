@@ -1,0 +1,27 @@
+﻿<html>
+<head>
+    <title>Rocket Lander Game</title>
+    <script type="text/javascript" src="game.js"></script>
+</head>
+<body>
+    <div style= "text-align: center;">
+        <h2>Rocker Lander Game</h2>
+        <button id="buttonStartGame" onclick="gameStart()">Start Game</button>
+        <button id="buttonSwitchPlanet" onclick="switchPlanet()">Switch Planet</button>
+        <br />
+        <hr />
+        <button id="buttonBurn" onclick="burn()">Burn</button>
+
+        <button id="buttonNoBurn" onclick="noburn()">No Burn</button>
+        <br />
+        <canvas style ="margin: -150px 0px 0px -250px"id="textCanvas" width="300" height="200">
+            This text is displayed if your browser does not support HTML5 Canvas.
+        </canvas>
+        <canvas style="margin: 25px 0px 0px 100px" id="gameCanvas" width="300" height="400">
+            This text is displayed if your browser does not support HTML5 Canvas.
+        </canvas>
+    </div>
+    <img style="display: none;" id="EnterpriseE4" src="EnterpriseE4.jpg" />
+    <img style="display: none;" id="fireStream" src="fireStream.jpg" />
+</body>
+</html>
